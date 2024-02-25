@@ -623,13 +623,15 @@ HandleKeyTypeBody(KeyTypesInfo *info, VarDef *def, KeyTypeInfo *type)
                 log_err(info->ctx,
                         XKB_ERROR_INVALID_SET_DEFAULT_STATEMENT,
                         "Support for changing the default type has been removed; "
-                        "Statement ignored\n");
+                        "Statement \"%s.%s\" ignored.\n", elem, field);
                 continue;
             }
             else {
-                log_err(info->ctx, XKB_LOG_MESSAGE_NO_ID,
-                        "Qualified statement %s.%s is not allowed here,"
-                        "only plain %s is accepted.\n", elem, field, field);
+                log_err(info->ctx, XKB_ERROR_GLOBAL_DEFAULTS_WRONG_SCOPE,
+                        "Cannot set global defaults for \"%s\" element within "
+                        "a key type statement: move statements to the global "
+                        "file scope. Assignment to \"%s.%s\" ignored.\n",
+                        elem, field, field);
                 return false;
             }
         }
